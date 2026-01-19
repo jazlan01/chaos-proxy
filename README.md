@@ -163,10 +163,6 @@ chaos:
 ### Running the Proxy
 
 ```bash
-# If you installed with go install
-chaos-proxy
-
-# If you built from source
 ./chaos-proxy
 
 # Make sure you have a config.yaml in the current directory
