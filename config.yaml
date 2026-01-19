@@ -1,6 +1,13 @@
 # config.yaml
 listen: ":8080"
-upstream: "https://jsonplaceholder.typicode.com"
+
+# If you're too scared to use it on your server, you can try it out with online dummy response servers.
+# Just point the upstream to one.
+
+# Example:
+# upstream: "https://jsonplaceholder.typicode.com"
+
+upstream: ""
 
 # Chaos configuration
 chaos:
