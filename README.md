@@ -21,8 +21,6 @@ A delightfully devious reverse proxy that weaponizes Murphy's Law for your testi
   - [Running the Proxy](#running-the-proxy)
   - [Making Requests](#making-requests)
   - [Watching the Chaos](#watching-the-chaos)
-- [Architecture](#%EF%B8%8F-architecture)
-  - [Project Structure](#project-structure)
 - [FAQ](#-faq)
 - [Known Issues & Limitations](#%EF%B8%8F-known-issues--limitations)
 - [Development](#%EF%B8%8F-development)
@@ -226,52 +224,6 @@ The proxy logs what it's doing to each request, so you can see the chaos in acti
 [CHAOS] Corrupting response
 [CHAOS] Strategy: JSON Corruption | 543 bytes -> 542 bytes
 [PROXY] GET /your-route
-```
-
-## 🏗️ Architecture
-
-```
-┌──────────┐      ┌──────────────┐      ┌──────────┐
-│  Client  │─────▶│ Chaos Proxy  │─────▶│ Upstream │
-└──────────┘      └──────────────┘      └──────────┘
-                        │
-                        ├─ Logging Middleware
-                        ├─ Chaos Middleware
-                        │   ├─ Drop Requests
-                        │   ├─ Inject Errors
-                        │   ├─ Add Latency
-                        │   └─ Corrupt Responses
-                        └─ Reverse Proxy
-```
-
-### Project Structure
-
-```
-chaos-proxy/
-├── cmd/
-│   └── chaos-proxy/
-│       └── main.go              # Application entry point
-├── internal/
-│   ├── chaos/
-│   │   ├── engine.go            # Core chaos decision engine
-│   │   ├── engine_test.go
-│   │   └── types.go             # Chaos configuration types
-│   ├── config/
-│   │   ├── config.go            # Configuration loading and validation
-│   │   └── config_test.go
-│   ├── middleware/
-│   │   ├── middleware.go        # Chaos injection middleware
-│   │   ├── middleware_test.go
-│   │   ├── corruption.go        # Response corruption strategies
-│   │   ├── corruption_test.go
-│   │   ├── logging.go           # Request logging middleware
-│   │   └── logging_test.go
-│   └── watcher/
-│       ├── watcher.go           # Config file hot-reload watcher
-│       └── watcher_test.go
-├── config.yaml                   # Configuration file
-├── go.mod
-└── README.md                     # You are here!
 ```
 
 ## 💬 FAQ
