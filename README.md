@@ -26,6 +26,7 @@ A delightfully devious reverse proxy that weaponizes Murphy's Law for your testi
 - [Development](#%EF%B8%8F-development)
   - [Running Tests](#running-tests)
   - [Adding New Chaos Strategies](#adding-new-chaos-strategies)
+  - [Publishing a Release](#publishing-a-release)
 - [Configuration Reference](#-configuration-reference)
 - [Contributing](#-contributing)
 - [License](#-license)
@@ -71,6 +72,28 @@ Configuration changes are picked up automatically. Tweak your chaos parameters o
 - A willingness to break things
 
 ### Installation
+
+#### From a release (prebuilt binaries)
+
+Download the archive for your platform from the [Releases page](https://github.com/khizar-sudo/chaos-proxy/releases). Archives are published for Linux (amd64, arm64), macOS (amd64, arm64) and Windows (amd64). Each archive contains the `chaos-proxy` binary, a `config.example.yaml` and this README.
+
+```bash
+# Linux / macOS (replace <version>, <os> and <arch>)
+tar -xzf chaos-proxy-<version>-<os>-<arch>.tar.gz
+cd chaos-proxy-<version>-<os>-<arch>
+
+# Chaos Proxy reads config.yaml from the current directory
+cp config.example.yaml config.yaml
+# Edit config.yaml with your upstream URL and chaos settings
+
+./chaos-proxy
+```
+
+On Windows, extract the `.zip`, rename `config.example.yaml` to `config.yaml`, edit it, and run `chaos-proxy.exe`.
+
+> On macOS you may need to remove the quarantine flag first: `xattr -d com.apple.quarantine ./chaos-proxy`
+
+#### From source
 
 ```bash
 # Clone the repository
@@ -266,6 +289,22 @@ Want to add a new type of chaos? Here's the general approach:
 3. Implement the chaos behavior in `internal/middleware/middleware.go`
 4. Add configuration options to the YAML schema
 5. Write tests (unlike production outages, these are optional - but please write them)
+
+### Publishing a Release
+
+Releases are built by the `.github/workflows/release.yml` workflow. To cut one:
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+Then create and publish a GitHub release from that tag (via the Releases page, or `gh release create v1.0.0 --generate-notes`). Publishing the release triggers the workflow, which:
+
+1. Runs the test suite once
+2. Cross-compiles static binaries (`CGO_ENABLED=0`) for linux/amd64, linux/arm64, darwin/amd64, darwin/arm64 and windows/amd64
+3. Packages each one with `config.example.yaml` and `README.md` as `chaos-proxy-<tag>-<os>-<arch>.tar.gz` (`.zip` for Windows)
+4. Attaches the archives to the release
 
 ## 📋 Configuration Reference
 
